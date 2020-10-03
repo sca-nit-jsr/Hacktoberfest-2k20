@@ -1,0 +1,455 @@
+#include <iostream>
+#include <map>
+#include <string>
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<stdio.h>
+using namespace std;
+
+static int rooms[50]={0};
+class name {
+char str[40];
+public:
+name() { strcpy(str, ""); }
+ name(char *s)   { strcpy(str, s); }
+ char *get()  { return str; }
+};
+bool operator<(name a, name b)
+{
+return strcmp(a.get(), b.get()) < 0;
+}
+class roomNum {
+int str;
+public:
+roomNum(int s) { str=s; }
+long int get() { return str; }
+};
+class phoneNum {
+long long  int  str;
+public:
+phoneNum(long long int s) { str=s;}
+long long int get() { return str; }
+};
+class checkin {
+string str="";
+public:
+checkin(string s)  { str=s; }
+ string get() { return str; }
+};
+class checkout {
+string str="";
+public:
+checkout(string s) { str=s; }
+ string get() { return str; }
+};
+/* Validating Date */
+int checkDate(int d,int m ,int y)
+{
+    if(y==2020&&m>=5){
+            if((m==5&&d>=20)||m>5){
+
+
+   /* if(m==2)
+        {
+            if(d>28){
+             return 1;
+            }
+
+        }
+     else*/ if(m%2==1||m==10){
+        if(d>31){
+            return 1;
+        }
+        }
+        else if(m%2==0)
+        {
+            if(d>30||m>12)
+                {
+            return 1;
+                }
+
+        }
+    }
+else
+    return 1;
+    }
+    else
+        return 1;
+        return 0;
+
+}
+/* Validating Phone number */
+int checkPhone(long long int ph)
+{
+
+    int r=0,rem;
+    while(ph!=0)
+    {
+        ph=ph/10;
+        rem=ph%10;
+        if(rem>=0&&rem<=9)
+            r++;
+        else
+        {
+            return 1;
+            break;
+        }
+    }
+    if(r!=10)
+        return 1;
+    return 0;
+}
+/*Calculating No of days */
+int noofdays(int dd,int cd,int mm,int cm)
+{
+    int nod;
+    if(cm==mm)
+            nod = cd-dd;
+        else if(cm-mm==1)
+        {
+
+        /*if(mm==2)
+            nod = 28-dd+cd;*/
+       if(mm%2==1||mm==10)
+            nod = 31-dd+cd;
+        else
+            nod = 30-dd+cd;
+        }
+        else if(cm-mm>1)
+        {
+            int mnt = cm - mm -1;
+          /*  if(mm==2)
+            nod = 28-dd+cd;
+            else */if(mm%2==1||mm==10)
+            nod = 31-dd+cd;
+            else
+            nod = 30-dd+cd;
+            int j = mm+1;
+
+            while(mnt--)
+            {
+               /* if(j==2)
+                    nod = nod + 28;
+                else */if(j%2==1||j==10)
+                    nod = nod + 31;
+                else if(j%2==0)
+                    nod = nod + 30;
+                j++;
+            }
+        }
+        return nod;
+}
+
+ int i=0;
+int rn=100;
+map<name, roomNum> hotel;
+map<name, phoneNum> contact;
+map<name, checkin> check;
+map<name, checkout> leave;
+map<name,int> cost;
+
+void roombook()
+{
+int dd,mm,yy,cm,cd,cy,nod,adult,child;
+char a;
+    if(rn<=150){
+int i=0;
+      char n[80];
+      string ci,co;
+      long long int ph;
+    cout<<"\nEnter the name:";
+    fflush(stdin);
+    gets(n);
+    fflush(stdin);
+    cout<<"Enter phone number:";
+    cin>>ph;
+    do{
+    int cp = checkPhone(ph);
+    if(cp==1)
+    {
+        fflush(stdin);
+        cout<<"Invalid Phone no "<<endl;
+        fflush(stdin);
+        cout<<"Enter phone no again : ";
+        fflush(stdin);
+        cin>>ph;
+    }
+    else
+        break;
+    }while(1);
+
+    fflush(stdin);
+
+    cout<<"Enter the check in date in the format dd/mm/yyyy : ";
+        fflush(stdin);
+        cin>>dd>>a>>mm>>a>>yy;
+        do{
+            int k = checkDate(dd,mm,yy);
+            if(k==1)
+            {
+                cout<<"Invalid date "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>dd>>a>>mm>>a>>yy;
+            }
+            else
+                break;
+        }while(1);
+        cout<<"Enter check out date in the format dd/mm/yyyy  : ";
+        cin>>cd>>a>>cm>>a>>cy;
+        do{
+            if(cm>=mm&&cd>=dd){
+
+            int k = checkDate(cd,cm,cy);
+            if(k==1)
+            {
+                cout<<"Invalid date "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>cd>>a>>cm>>a>>cy;
+            }
+
+            else
+                break;
+            }
+            else if(cm>mm)
+                break;
+            else if(mm<=cm&&cd<=dd)
+            {
+                cout<<"Checkout Date cannot be before CheckIn date  "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>cd>>a>>cm>>a>>cy;
+            }
+           }while(1);
+        int nod = noofdays(dd,cd,mm,cm);
+
+        ci = to_string(dd) + " / " + to_string(mm) + " / " + to_string(yy);
+
+        co =  to_string(cd) + " / " + to_string(cm) + " / " + to_string(cy);
+
+        int total = (1500)*nod;
+        while(rooms[i]!=0){
+            i++;
+        }
+        rn = 100 + i;
+
+
+    hotel.insert(pair<name, roomNum>(name(n),roomNum(rn)));
+    contact.insert(pair<name, phoneNum>(name(n),phoneNum(ph)));
+    check.insert(pair<name, checkin>(name(n),checkin(ci)));
+    leave.insert(pair<name, checkout>(name(n),checkout(co)));
+    cost.insert(pair<name,int>(name(n),total));
+
+    cout<<"\nRoom booked\n"<<"Your room number is:"<<rn<<endl<<"Total Cost : "<<total<<endl<<"We hope you have a happy stay!"<<endl;
+    rooms[rn-100]=1;
+    rn++;
+}
+else if(rn>150)
+{
+    cout<<"\nNo room available. Sorry!";
+}
+}
+void searchcust()
+{
+char str[80];
+cout << "Enter name: ";
+fflush(stdin);
+gets(str);
+fflush(stdin);
+map<name, roomNum>::iterator p;
+map<name, phoneNum>::iterator ph;
+map<name, checkin>::iterator c;
+map<name, checkout>::iterator ch1;
+map<name,int>::iterator tc;
+p = hotel.find(name(str));
+ph = contact.find(name(str));
+c = check.find(name(str));
+ch1 = leave.find(name(str));
+tc = cost.find(name(str));
+if(p != hotel.end())
+{
+    cout << endl<<str<<" is staying in room number: " << p->second.get()<<endl;
+    cout << " Phone number: " << ph->second.get()<<endl;
+    cout << " Check in date: " << c->second.get()<<endl;
+    cout << " Check out date: " << ch1->second.get()<<endl;
+    cout << " Total Cost: " << tc->second << endl;
+}
+else
+cout << "\nName not in hotel.\n";
+}
+void editdet()
+{
+int str;
+fflush(stdin);
+cout << "\nEnter room number: ";
+fflush(stdin);
+cin >> str;
+if(str<rn)
+{
+    for(auto it=hotel.begin();it!=hotel.end();++it)
+          {
+        if(it->second.get()==str)
+          {
+        auto it2 = contact.find(it->first);
+          auto it3 = leave.find(it->first);
+          auto it4 = check.find(it->first);
+          auto it5 = cost.find(it->first);
+          hotel.erase(it);
+          contact.erase(it2);
+          leave.erase(it3);
+          check.erase(it4);
+          cost.erase(it5);
+          break;
+          }
+          }
+      char n[80];
+      string cit,cot;
+      long long int ph1;
+      int dd,mm,yy,cm,cd,cy,nod;
+      char a;
+      cout<<"\nEnter the name:";
+      fflush(stdin);
+      gets(n);
+    cout<<"Enter phone number:";
+    fflush(stdin);
+    cin>>ph1;
+    do{
+    int cp = checkPhone(ph1);
+    if(cp==1)
+    {
+        cout<<"Invalid Phone no "<<endl;
+        fflush(stdin);
+        cout<<"Enter phone no again : ";
+        fflush(stdin);
+        cin>>ph1;
+    }
+    else
+        break;
+    }while(1);
+
+    fflush(stdin);
+    cout<<"Enter the check in date in the format dd/mm/yyyy : ";
+        fflush(stdin);
+        cin>>dd>>a>>mm>>a>>yy;
+        do{
+            int k = checkDate(dd,mm,yy);
+            if(k==1)
+            {
+                cout<<"Invalid date "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>dd>>a>>mm>>a>>yy;
+            }
+            else
+                break;
+        }while(1);
+    fflush(stdin);
+    cout<<"Enter check out date in the format dd/mm/yyyy  : ";
+        fflush(stdin);
+        cin>>cd>>a>>cm>>a>>cy;
+        do{
+            if(cm>=mm&&cd>=dd){
+            int k = checkDate(cd,cm,cy);
+            if(k==1)
+            {
+                cout<<"Invalid date "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>cd>>a>>cm>>a>>cy;
+            }
+            else
+                break;
+            }
+            else
+            {
+                cout<<"Checkout Date cannot be before CheckIn date  "<<endl;
+                cout<<"Enter the date Again : " ;
+                cin>>cd>>a>>cm>>a>>cy;
+            }
+
+        }while(1);
+        nod = noofdays(dd,cd,mm,cm);
+
+
+        cit = to_string(dd) + " / " + to_string(mm) + " / " + to_string(yy);
+
+        cot =  to_string(cd) + " / " + to_string(cm) + " / " + to_string(cy);
+        int total = 1500*nod;
+    hotel.insert(pair<name, roomNum>(name(n),roomNum(str)));
+    contact.insert(pair<name, phoneNum>(name(n),phoneNum(ph1)));
+    check.insert(pair<name, checkin>(name(n),checkin(cit)));
+    leave.insert(pair<name, checkout>(name(n),checkout(cot)));
+    cost.insert(pair<name,int>(name(n),total));
+    cout<<"Details successfully edited\n";
+
+}
+else
+    cout<<"\nRoom not booked yet!\n";
+}
+
+void display()
+{
+string str;
+map<name, roomNum>::iterator p;
+map<name, phoneNum>::iterator ph;
+map<name, checkin>::iterator c;
+map<name, checkout>::iterator ch1;
+map<name,int>::iterator tc;
+cout<<"\n      Name\t\t\t\tRoom Number\t\tPhone Number\t\tCheck-In\t\t\tCheck-Out\t\tTotal Cost\n";
+cout<<"-------------------------------------------------------------------------------------------------------------------------------------------------------------------------"<<endl;
+for(p=hotel.begin(),ph=contact.begin(),c=check.begin(),ch1=leave.begin(),tc=cost.begin();
+p!=hotel.end()&&ph!=contact.end()&&c!=check.end()&&ch1!=leave.end()&&tc!=cost.end();++p,++ph,++c,++ch1,++tc)
+{
+   name d(p->first);
+
+    cout<<" "<<setw(18)<<d.get()<<"\t\t\t"<<p->second.get()<<"\t\t\t"<<ph->second.get()<<"\t\t"<<c->second.get()<<"\t\t\t"<<ch1->second.get()<<"\t\t\t"<<tc->second<<endl<<endl;
+}
+fflush(stdin);
+}
+void dealloc()
+{
+    long  int str;
+cout << "\nEnter room number: ";
+fflush(stdin);
+cin >> str;
+if(str<rn)
+{
+    map<name,roomNum>::iterator it;
+
+    for(it=hotel.begin();it!=hotel.end();++it)
+    {
+        if(it->second.get()==str)
+       {
+         rooms[str-100]=0;
+          hotel.erase(it);
+          cout<<"\nThank you for your stay!\nRoom deallocated\n";
+          break;
+
+       }
+
+    }
+}
+else
+    cout<<"\nRoom yet not allocated!\n";
+}
+int main()
+{
+
+cout<<"****************************************************************WELCOME TO HOTEL TRANSLYVANIA*****************************************************************"<<endl<<endl;
+cout<<"**************************************************************************************************************************************************************"<<endl<<endl;
+char choice;
+int ch;
+do{
+cout<<"\n1.ROOM BOOKING\n2.EDIT CUSTOMER DETAILS\n3.SEARCH CUSTOMER\n4.DEALLOCATE ROOM\n5.SHOW ALL BOOKINGS\n6.EXIT\n";
+cout<<"\nEnter choice:";
+cin>>ch;
+switch(ch)
+{
+    case  1: roombook();break;
+   case 2: editdet();break;
+    case 3: searchcust();break;
+    case 4:dealloc();break;
+  case 5:display();break;
+    case 6: cout<<"\nThank you!\n";break;
+    default:cout<<"\n Wrong Choice\n";
+
+}
+
+}while(ch!=6);
+}
