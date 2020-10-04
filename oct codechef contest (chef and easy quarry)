@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); ++i)
+#define repF(i,a,n) for(int i = (a); i <= (n); ++i)
+#define repB(i,a,n) for(int i = (a); i >= (n); --i)
+#define umii unordered_map<int,int>
+#define umll unordered_map<ll,ll>
+#define mii map<int,int>
+#define mll map<ll,ll>
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define vi vector<int>
+#define vl vector<ll>
+#define F first
+#define S second
+#define seti set<int>
+#define setl set<ll>
+#define pb push_back
+#define db1(x) cout<<#x<<"="<<x<<'\n'
+#define db2(x,y) cout<<#x<<"="<<x<<","<<#y<<"="<<y<<'\n'
+#define db3(x,y,z) cout<<#x<<"="<<x<<","<<#y<<"="<<y<<","<<#z<<"="<<z<<'\n'
+#define dbV(arr) cout << #arr << "=[ "; \
+for(auto i:arr) cout << i << " "; cout << "]\n";
+#define MOD 1000000007
+#define all(z) z.begin(),z.end()
+using namespace std;
+using ll = long long;
+vector<vi> tree;
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	ll t; cin >> t;
+	while (t--) {
+		int n , k; cin >> n >> k;
+		ll quarry[n];
+		ll cnt = 0;
+		for (int i = 0; i < n; i++) {
+			cin >> quarry[i];
+		}
+		ll i;
+		for ( i = 0; i < n; i++) {
+			if (quarry[i] >= k) {
+				cnt++;
+				quarry[i + 1] += (quarry[i] - k);
+			}
+			if (quarry[i] < k)
+				break;
+		}
+		if (i == n) {
+			cnt += ((quarry[n - 1] - k) / k);
+		}
+		cout << cnt + 1 << endl;
+	}
+
+	return 0;
+}
