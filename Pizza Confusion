@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+#include<vector>
+using namespace std;
+void Get(int a[],string s[],long long n)
+{
+    int i;
+    vector<pair<int,string>>vp;
+    vector<string>sl;
+    for(i=0;i<n;i++)
+        vp.push_back(make_pair(a[i],s[i]));
+    sort(vp.begin(),vp.end());
+    int la=vp[n-1].first;
+    for(i=n-1;vp[i].first>=la;i--)
+	sl.push_back(vp[i].second);
+    sort(sl.begin(),sl.end());
+    cout<<sl[0];
+    
+}
+int main()
+{
+    long long n;
+    cin>>n;
+    string s[n];
+    int a[n];
+    for(int i=0;i<n;i++)
+        cin>>s[i]>>a[i];
+    Get(a,s,n);
+    return 0;
+}
